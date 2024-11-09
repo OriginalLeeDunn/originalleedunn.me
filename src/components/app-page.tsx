@@ -283,7 +283,7 @@ export function BlockPage() {
         </div>
         <div className="flex justify-center space-x-4">
           <motion.a 
-            href="https://github.com/originalLeedunn" 
+            href="https://github.com/OriginalLeeDunn/originalleedunn.me" 
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1 }}
