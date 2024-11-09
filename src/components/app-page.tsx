@@ -54,10 +54,12 @@ const skills = [
 ]
 
 const projects = [
-  { name: "AI-Powered Chat Application", description: "Developed a real-time chat application with AI-driven response suggestions.", techs: ["React", "Node.js", "TensorFlow.js"], stars: 245 },
-  { name: "Blockchain Voting System", description: "Created a secure, transparent voting system using blockchain technology.", techs: ["Solidity", "Ethereum", "Web3.js"], stars: 189 },
-  { name: "Augmented Reality Shopping Experience", description: "Built an AR app allowing users to visualize products in their space before purchasing.", techs: ["Unity", "ARKit", "C#"], stars: 132 },
-  { name: "Predictive Maintenance IoT Platform", description: "Designed an IoT platform for industrial equipment monitoring and failure prediction.", techs: ["Python", "TensorFlow", "AWS IoT"], stars: 98 },
+  { name: "Personal Website", description: "Developed my personal website to showcase my portfolio and blog.", techs: ["Next.js", "Vercel"], stars: 150 },
+  { name: "AI Voice Assistant 'Neptune'", description: "Created an AI voice assistant capable of performing various tasks through voice commands.", techs: ["Python", "TensorFlow", "SpeechRecognition"], stars: 200 },
+  { name: "AI Integrated Web Scraper", description: "Built a web scraper integrated with AI to extract and analyze data from websites.", techs: ["Python", "BeautifulSoup", "TensorFlow"], stars: 175 },
+  { name: "Personal AGI", description: "Developed a personal AGI using local models to create agents for handling tasks.", techs: ["Python", "TensorFlow", "PyTorch"], stars: 220 },
+  { name: "Cinnamon Roll E-commerce Website", description: "Created a website for my wife to sell cinnamon rolls online.", techs: ["Shopify", "JavaScript"], stars: 130 },
+  { name: "Tech Startup", description: "Working on a tech startup with a cohort of best friends/partners.", techs: ["Various"], stars: 100 }
 ]
 
 const experiences = [
