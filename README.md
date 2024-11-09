@@ -67,6 +67,6 @@ Visit the live site at: [originalleedunn.vercel.app](https://originalleedunn.ver
 
 Lee Dunn
 - Email: OriginalLeeDunn@proton.me
-- GitHub: [@originalLeedunn](https://github.com/originalLeedunn)
+- GitHub: [@OriginalLeeDunn](https://github.com/originalLeedunn)
   - Portfolio Repo: [Repo](https://github.com/OriginalLeeDunn/originalleedunn.me)
 - Website: [OriginalLeeDunn.Vercel](https://originalleedunn.vercel.app/)
