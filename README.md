@@ -57,7 +57,7 @@ The site is automatically deployed to Vercel. Any push to the main branch trigge
 
 ## 🌐 Live Site
 
-Visit the live site at: [https://originalleedunn.vercel.app/]
+Visit the live site at: [originalleedunn.vercel.app](https://originalleedunn.vercel.app/)
 
 ## 📝 License
 
@@ -68,4 +68,5 @@ Visit the live site at: [https://originalleedunn.vercel.app/]
 Lee Dunn
 - Email: OriginalLeeDunn@proton.me
 - GitHub: [@originalLeedunn](https://github.com/originalLeedunn)
+  - Portfolio Repo: [Repo](https://github.com/OriginalLeeDunn/originalleedunn.me)
 - Website: [OriginalLeeDunn.Vercel](https://originalleedunn.vercel.app/)
