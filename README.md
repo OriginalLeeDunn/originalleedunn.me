@@ -44,7 +44,7 @@ npm run build
 The site is automatically deployed to Vercel. Any push to the main branch triggers a new deployment.
 
 ### Branch Structure
-- `main`: Production branch
+- `prod`: Production branch
 - `dev`: Development branch
 - Feature branches: Created from `dev` for new features
 
@@ -53,7 +53,7 @@ The site is automatically deployed to Vercel. Any push to the main branch trigge
 2. Make changes
 3. Push and test preview deployment
 4. Merge to `dev` via pull request
-5. Merge `dev` to `main` for production
+5. Merge `dev` to `prod` for production
 
 ## 🌐 Live Site
 
