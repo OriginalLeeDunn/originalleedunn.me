@@ -3,6 +3,9 @@ import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import { Mic, MicOff, Home, User, Code, Briefcase, GraduationCap, Award, Mail, MapPin, Github, Linkedin, Twitter } from 'lucide-react'
 import avatarImage from '../images/avatar.gif'
 
+/**
+ * Interface for the SpeechRecognition API, which allows for voice command recognition.
+ */
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
@@ -13,10 +16,16 @@ interface SpeechRecognition extends EventTarget {
   onerror: (event: SpeechRecognitionErrorEvent) => void;
 }
 
+/**
+ * Constructor interface for creating new SpeechRecognition instances.
+ */
 interface SpeechRecognitionConstructor {
   new (): SpeechRecognition;
 }
 
+/**
+ * Interface for handling errors in the SpeechRecognition API.
+ */
 interface SpeechRecognitionErrorEvent extends Event {
   error: string;
   message: string;
@@ -35,7 +44,10 @@ declare global {
   }
 }
 
-
+/**
+ * Sections of the portfolio, each with a name and an icon.
+ * You can add or remove sections by modifying this array.
+ */
 const sections = [
   { name: 'Home', icon: Home },
   { name: 'Profile', icon: User },
@@ -43,16 +55,24 @@ const sections = [
   { name: 'Projects', icon: Briefcase },
   { name: 'Experience', icon: Award },
   { name: 'Education', icon: GraduationCap }
-]
+];
 
+/**
+ * Skills data with name and proficiency level.
+ * Modify this array to update the skills displayed.
+ */
 const skills = [
   { name: "TypeScript", level: 85 },
   { name: "Python", level: 80 },
   { name: "React", level: 85 },
   { name: "Node.js", level: 75 },
   { name: "AI Tools", level: 90 },
-]
+];
 
+/**
+ * Projects data including name, description, technologies used, and star rating.
+ * Add or remove projects by editing this array.
+ */
 const projects = [
   { name: "Personal Website", description: "Developed my personal website to showcase my portfolio and blog.", techs: ["Next.js", "Vercel"], stars: 150 },
   { name: "AI Voice Assistant 'Neptune'", description: "Created an AI voice assistant capable of performing various tasks through voice commands.", techs: ["Python", "TensorFlow", "SpeechRecognition"], stars: 200 },
@@ -60,8 +80,12 @@ const projects = [
   { name: "Personal AGI", description: "Developed a personal AGI using local models to create agents for handling tasks.", techs: ["Python", "TensorFlow", "PyTorch"], stars: 220 },
   { name: "Cinnamon Roll E-commerce Website", description: "Created a website for my wife to sell cinnamon rolls online.", techs: ["Shopify", "JavaScript"], stars: 130 },
   { name: "Tech Startup", description: "Working on a tech startup with a cohort of best friends/partners.", techs: ["Various"], stars: 100 }
-]
+];
 
+/**
+ * Professional experiences with role, company, duration, and description.
+ * Update this array to reflect new experiences.
+ */
 const experiences = [
   { 
     role: "Tech 1 - Application Services", 
@@ -72,11 +96,15 @@ const experiences = [
   { 
     role: "Tech 1 Contractor", 
     company: "Nordstrom", 
-    duration: "Feb 2020 - Oct 2021", 
+    duration: "Mar 2020 - Oct 2021", 
     description: "Provided End User Support as a contractor, handling technical support while building foundation for future development work." 
   }
-]
+];
 
+/**
+ * Education history with degree, school, year, focus, and skills.
+ * Modify this array to update educational background.
+ */
 const education = [
   { 
     degree: "Self-Taught Development", 
@@ -92,63 +120,33 @@ const education = [
     focus: "Started with PC building at age 9, evolved into software development",
     skills: ["Hardware", "Troubleshooting", "System Administration"]
   }
-]
+];
 
+/**
+ * Chart data for skills with name and hours spent.
+ * Update this array to change the chart representation.
+ */
 const chartdata = [
   { name: "React", hours: 450 },
   { name: "TypeScript", hours: 390 },
   { name: "Node.js", hours: 370 },
   { name: "GraphQL", hours: 280 },
   { name: "Python", hours: 220 },
-]
-
-// Add these type declarations at the top of your file
-interface SpeechRecognition extends EventTarget {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start(): void;
-  stop(): void;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: SpeechRecognitionErrorEvent) => void;
-}
-
-interface SpeechRecognitionConstructor {
-  new (): SpeechRecognition;
-}
-
-// Add the error event interface
-interface SpeechRecognitionErrorEvent extends Event {
-  error: string;
-  message: string;
-}
-
-declare global {
-  interface Window {
-    SpeechRecognition: SpeechRecognitionConstructor;
-    webkitSpeechRecognition: SpeechRecognitionConstructor;
-  }
-
-  interface SpeechRecognitionEvent {
-    results: SpeechRecognitionResultList;
-    resultIndex: number;
-    readonly isTrusted: boolean;
-  }
-}
+];
 
 export function BlockPage() {
-  // Move all state and ref declarations inside the component
-  const [activeSection, setActiveSection] = useState('Home')
-  const [isListening, setIsListening] = useState(false)
-  const [rotationAngle, setRotationAngle] = useState(0)
-  const controls = useAnimation()
+  // State for managing the active section, listening status, and rotation angle.
+  const [activeSection, setActiveSection] = useState('Home');
+  const [isListening, setIsListening] = useState(false);
+  const [rotationAngle, setRotationAngle] = useState(0);
+  const controls = useAnimation();
   
-  // Update the ref type to avoid window namespace issues
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  // Reference for the SpeechRecognition instance.
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-      // Use type assertion to handle the window object
+      // Initialize the SpeechRecognition API.
       const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognitionAPI();
       
@@ -159,11 +157,11 @@ export function BlockPage() {
         recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-              const command = event.results[i][0].transcript.toLowerCase().trim()
-              handleVoiceCommand(command)
+              const command = event.results[i][0].transcript.toLowerCase().trim();
+              handleVoiceCommand(command);
             }
           }
-        }
+        };
       }
     }
 
@@ -171,30 +169,41 @@ export function BlockPage() {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-    }
-  }, [])
+    };
+  }, []);
 
+  /**
+   * Handles voice commands by matching them to section names.
+   * @param {string} command - The voice command received.
+   */
   const handleVoiceCommand = (command: string) => {
-    const sectionMatch = sections.find(section => command.includes(section.name.toLowerCase()))
+    const sectionMatch = sections.find(section => command.includes(section.name.toLowerCase()));
     if (sectionMatch) {
-      setActiveSection(sectionMatch.name)
-      rotateToSection(sectionMatch.name)
+      setActiveSection(sectionMatch.name);
+      rotateToSection(sectionMatch.name);
     }
-  }
+  };
 
+  /**
+   * Toggles the listening state for voice commands.
+   */
   const toggleListening = () => {
     if (isListening) {
-      recognitionRef.current?.stop()
+      recognitionRef.current?.stop();
     } else {
-      recognitionRef.current?.start()
+      recognitionRef.current?.start();
     }
-    setIsListening(!isListening)
-  }
+    setIsListening(!isListening);
+  };
 
+  /**
+   * Rotates the navigation to the specified section.
+   * @param {string} sectionName - The name of the section to rotate to.
+   */
   const rotateToSection = (sectionName: string) => {
-    const index = sections.findIndex(section => section.name === sectionName)
-    const newAngle = -(index * (360 / sections.length))
-    setRotationAngle(newAngle)
+    const index = sections.findIndex(section => section.name === sectionName);
+    const newAngle = -(index * (360 / sections.length));
+    setRotationAngle(newAngle);
     controls.start({ 
       rotate: newAngle,
       transition: { 
@@ -202,9 +211,13 @@ export function BlockPage() {
         stiffness: 300, 
         damping: 30
       }
-    })
-  }
+    });
+  };
 
+  /**
+   * Components for each section of the portfolio.
+   * Modify the JSX within each function to change the content and style of the sections.
+   */
   const sectionComponents = {
     Home: () => (
       <motion.div
@@ -224,8 +237,8 @@ export function BlockPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
-                setActiveSection(section.name)
-                rotateToSection(section.name)
+                setActiveSection(section.name);
+                rotateToSection(section.name);
               }}
             >
               {section.name}
@@ -344,17 +357,17 @@ export function BlockPage() {
             <div className="w-full md:w-1/2">
               <div className="relative h-64 md:h-80">
                 {chartdata.map((item, index) => {
-                  const angle = (index / chartdata.length) * Math.PI * 2 - Math.PI / 2
-                  const radius = 100
-                  const x = Math.cos(angle) * radius + 120
-                  const y = Math.sin(angle) * radius + 120
+                  const angle = (index / chartdata.length) * Math.PI * 2 - Math.PI / 2;
+                  const radius = 100;
+                  const x = Math.cos(angle) * radius + 120;
+                  const y = Math.sin(angle) * radius + 120;
                   return (
                     <div key={item.name} className="absolute" style={{ left: x, top: y }}>
                       <div className="w-4 h-4 bg-purple-600 rounded-full"></div>
                       <p className="text-xs mt-1">{item.name}</p>
                       <p className="text-xs">{item.hours} hrs</p>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -482,7 +495,7 @@ export function BlockPage() {
         </div>
       </motion.div>
     ),
-  }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
@@ -512,10 +525,10 @@ export function BlockPage() {
             style={{ transformOrigin: 'center center' }}
           >
             {sections.map((section, index) => {
-              const angle = (index / sections.length) * 360
-              const radius = 150
-              const x = Math.sin((angle * Math.PI) / 180) * radius
-              const y = -Math.cos((angle * Math.PI) / 180) * radius
+              const angle = (index / sections.length) * 360;
+              const radius = 150;
+              const x = Math.sin((angle * Math.PI) / 180) * radius;
+              const y = -Math.cos((angle * Math.PI) / 180) * radius;
 
               return (
                 <motion.button
@@ -530,8 +543,8 @@ export function BlockPage() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => {
-                    setActiveSection(section.name)
-                    rotateToSection(section.name)
+                    setActiveSection(section.name);
+                    rotateToSection(section.name);
                   }}
                 >
                   <motion.div
@@ -542,7 +555,7 @@ export function BlockPage() {
                     <section.icon className="w-8 h-8" />
                   </motion.div>
                 </motion.button>
-              )
+              );
             })}
           </motion.div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -565,5 +578,5 @@ export function BlockPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }
