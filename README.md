@@ -61,12 +61,12 @@ Visit the live site at: [originalleedunn.vercel.app](https://originalleedunn.ver
 
 ## 📝 License
 
-[Your chosen license]
+MIT License
 
 ## 👤 Author
 
 Lee Dunn
 - Email: OriginalLeeDunn@proton.me
 - GitHub: [@OriginalLeeDunn](https://github.com/originalLeedunn)
-  - Portfolio Repo: [Repo](https://github.com/OriginalLeeDunn/originalleedunn.me)
+- Portfolio Repo: [Repo](https://github.com/OriginalLeeDunn/originalleedunn.me)
 - Website: [OriginalLeeDunn.Vercel](https://originalleedunn.vercel.app/)
