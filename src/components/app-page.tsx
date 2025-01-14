@@ -134,11 +134,39 @@ const chartdata = [
   { name: "Python", hours: 220 },
 ];
 
+interface ModalProps {
+  children: React.ReactNode;
+  onClose: () => void;
+}
+
+const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4"
+        onClick={e => e.stopPropagation()}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 export function BlockPage() {
   // State for managing the active section, listening status, and rotation angle.
   const [activeSection, setActiveSection] = useState('Home');
   const [isListening, setIsListening] = useState(false);
   const [rotationAngle, setRotationAngle] = useState(0);
+  const [showCommands, setShowCommands] = useState(false);
   const controls = useAnimation();
   
   // Reference for the SpeechRecognition instance.
@@ -392,7 +420,7 @@ export function BlockPage() {
               transition={{ delay: index * 0.1 }}
               className="bg-gray-800 rounded-lg p-6"
             >
-              <h4 className="text-lg font-semibold mb-2">{project.name}</h4>
+              <h4 className="text-lg font-semibold">{project.name}</h4>
               <p className="text-gray-300 mb-4">{project.description}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.techs.map((tech, i) => (
@@ -501,6 +529,31 @@ export function BlockPage() {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-8">
+        {/* Menu Button */}
+        <motion.button
+          className="fixed bottom-20 right-8 p-4 rounded-full bg-purple-800/80 hover:bg-pink-600/80 backdrop-blur-sm border border-gray-700/30 transition-all duration-300 shadow-lg"
+          style={{ boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)" }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowCommands(true)}
+          aria-label="Show voice commands"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6 text-gray-300" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" 
+            />
+          </svg>
+        </motion.button>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSection}
@@ -513,69 +566,264 @@ export function BlockPage() {
             {sectionComponents[activeSection as keyof typeof sectionComponents]()}
           </motion.div>
         </AnimatePresence>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {showCommands && (
+            <Modal onClose={() => setShowCommands(false)}>
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-semibold">Voice Commands</h2>
+                  <button 
+                    onClick={() => setShowCommands(false)}
+                    className="p-2 rounded-full hover:bg-gray-700/50 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <ul className="space-y-3">
+                  {sections.map(section => (
+                    <li key={section.name} className="flex items-center space-x-3 text-gray-300">
+                      <section.icon className="w-5 h-5" />
+                      <span>"Go to {section.name}"</span>
+                    </li>
+                  ))}
+                  <li className="text-gray-300">Press "<b>V</b>" to Toggle Voice Controls on/off</li>
+                </ul>
+              </div>
+            </Modal>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Smooth Rotating Navigation */}
       <div className="flex flex-col items-center justify-center py-16">
-        <div className="relative w-80 h-80">
+        <div 
+          className="relative w-[400px] h-[400px]"
+          role="navigation"
+          aria-label="Section Navigation"
+        >
+          {/* Background Circle */}
+          <div className="absolute inset-0 rounded-full border border-purple-500/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm" />
+          
           <motion.div
             className="absolute inset-0"
             animate={controls}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             style={{ transformOrigin: 'center center' }}
+            layoutId="navigation-wheel"
           >
             {sections.map((section, index) => {
               const angle = (index / sections.length) * 360;
-              const radius = 150;
-              const x = Math.sin((angle * Math.PI) / 180) * radius;
-              const y = -Math.cos((angle * Math.PI) / 180) * radius;
+              const iconRadius = 140;
+              const iconX = Math.sin((angle * Math.PI) / 180) * iconRadius;
+              const iconY = -Math.cos((angle * Math.PI) / 180) * iconRadius;
 
               return (
-                <motion.button
-                  key={section.name}
-                  className={`absolute w-16 h-16 rounded-full flex items-center justify-center ${
-                    activeSection === section.name ? 'bg-purple-600' : 'bg-gray-800'
-                  }`}
+                <motion.div 
+                  key={section.name} 
+                  className="absolute" 
                   style={{
-                    left: `calc(50% + ${x}px - 32px)`,
-                    top: `calc(50% + ${y}px - 32px)`,
+                    left: `calc(50% + ${iconX}px - 32px)`,
+                    top: `calc(50% + ${iconY}px - 32px)`,
                   }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    setActiveSection(section.name);
-                    rotateToSection(section.name);
+                  whileHover="hover"
+                  initial="initial"
+                  variants={{
+                    hover: { scale: 1.05 },
+                    initial: { scale: 1 }
                   }}
                 >
-                  <motion.div
+                  {/* Navigation Button */}
+                  <motion.button
+                    className={`
+                      w-16 h-16 rounded-full 
+                      flex items-center justify-center 
+                      transition-all duration-300
+                      border-2
+                      ${activeSection === section.name 
+                        ? 'bg-purple-600 border-purple-400/30 shadow-lg shadow-purple-500/20' 
+                        : 'bg-gray-800/80 border-gray-700/30 hover:bg-gray-700/80 hover:border-gray-600/30'
+                      }
+                    `}
                     style={{
-                      rotate: `${-rotationAngle}deg`,
+                      boxShadow: activeSection === section.name 
+                        ? '0 0 20px rgba(147, 51, 234, 0.2)' 
+                        : 'none'
                     }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => {
+                      setActiveSection(section.name);
+                      rotateToSection(section.name);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ' || e.key === 'v' || e.key === 'V') {
+                        setActiveSection(section.name);
+                        rotateToSection(section.name);
+                        setIsListening(!isListening);
+                      }
+                    }}
+                    role="tab"
+                    aria-selected={activeSection === section.name}
+                    aria-controls={`section-${section.name.toLowerCase()}`}
+                    tabIndex={0}
                   >
-                    <section.icon className="w-8 h-8" />
-                  </motion.div>
-                </motion.button>
+                    <motion.div
+                      style={{
+                        rotate: `${-rotationAngle}deg`,
+                      }}
+                      variants={{
+                        hover: { rotate: `${-rotationAngle + 360}deg` },
+                        initial: { rotate: `${-rotationAngle}deg` }
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className={`
+                        transition-all duration-300
+                        ${activeSection === section.name 
+                          ? 'text-white' 
+                          : 'text-gray-400'
+                        }
+                      `}
+                    >
+                      <section.icon className="w-7 h-7" />
+                    </motion.div>
+                  </motion.button>
+                </motion.div>
               );
             })}
           </motion.div>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+
+          {/* Center Microphone Button */}
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            initial={false}
+            animate={{
+              scale: isListening ? [1, 1.05, 1] : 1,
+            }}
+            transition={{
+              duration: 1,
+              repeat: isListening ? Infinity : 0,
+              repeatType: "reverse"
+            }}
+          >
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={toggleListening}
-              className="p-6 rounded-full bg-purple-600 text-white z-10 pointer-events-auto"
+              onKeyDown={(e) => {
+                if (e.key === 'v' || e.key === 'V') {
+                  toggleListening();
+                  e.stopPropagation();
+                }
+              }}
+              className={`
+                p-6 rounded-full 
+                transition-all duration-300
+                border-2
+                ${isListening 
+                  ? 'bg-purple-600 border-purple-400/30 shadow-lg shadow-purple-500/30' 
+                  : 'bg-gray-800/80 border-gray-700/30 hover:bg-gray-700/80 hover:border-gray-600/30'
+                }
+                text-white z-10 pointer-events-auto
+              `}
+              style={{
+                boxShadow: isListening 
+                  ? '0 0 30px rgba(147, 51, 234, 0.3)' 
+                  : 'none'
+              }}
+              aria-label={isListening ? "Stop voice commands" : "Start voice commands"}
+              role="switch"
+              aria-checked={isListening}
             >
-              {isListening ? <MicOff className="w-8 h-8" /> : <Mic className="w-8 h-8" />}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isListening ? "mic-off" : "mic-on"}
+                  initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
+                  transition={{ duration: 0.2 }}
+                  className={`
+                    ${isListening ? 'text-white' : 'text-gray-300'}
+                  `}
+                >
+                  {isListening ? <MicOff className="w-8 h-8" /> : <Mic className="w-8 h-8" />}
+                </motion.div>
+              </AnimatePresence>
             </motion.button>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Voice Command Indicator */}
-      <div className="text-center pb-4">
-        <p className="text-sm md:text-base font-light bg-gray-800 bg-opacity-80 backdrop-blur-md px-4 py-2 rounded-full inline-block">
-          {isListening ? 'Listening... Say a section name' : 'Click the mic to enable voice commands'}
-        </p>
+      <div className="relative flex items-center justify-center pb-4">
+        <motion.div
+          className="inline-block"
+          animate={{
+            scale: isListening ? [1, 1.02, 1] : 1
+          }}
+          transition={{
+            duration: 1,
+            repeat: isListening ? Infinity : 0,
+            repeatType: "reverse"
+          }}
+        >
+          <motion.p
+            className={`text-sm md:text-base font-light px-4 py-2 rounded-full inline-flex items-center gap-2 transition-all duration-300 ${
+              isListening 
+                ? 'bg-purple-600/30 backdrop-blur-md' 
+                : 'bg-gray-800/80 backdrop-blur-md'
+            }`}
+            initial={false}
+            animate={{
+              backgroundColor: isListening ? 'rgba(147, 51, 234, 0.3)' : 'rgba(31, 41, 55, 0.8)'
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.span
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isListening ? 1 : 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11H9a2 2 0 012-2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0h2m6 2a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2m6-2h2"
+                />
+              </svg>
+            </motion.span>
+            {isListening ? (
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 3 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="flex items-center justify-center">
+                  Listening for voice commands... 
+                </div>
+                <br/>Press "<b>Space</b>" or "<b>V</b>" to toggle voice commands...
+              </motion.span>
+            ) : (
+              <div className="flex items-center justify-center">
+                <span className="text-center">
+                  Click the microphone to enable voice commands then navigate the site <br/>or <br/>Use traditional navigation methods like clicking the buttons
+                </span>
+              </div>
+            )
+            }
+          </motion.p>
+        </motion.div>
       </div>
     </div>
   );
