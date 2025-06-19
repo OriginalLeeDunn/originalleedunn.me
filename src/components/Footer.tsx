@@ -23,12 +23,12 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/leedunn",
+    url: "https://linkedin.com/in/OriginalLeeDunn",
     icon: Linkedin,
   },
   {
     name: "Email",
-    url: "mailto:hello@originalleedunn.me",
+    url: "mailto:OriginalLeeDunn@proton.me",
     icon: Mail,
   },
 ];
@@ -76,8 +76,7 @@ export const Footer = ({ className, ...props }: FooterProps) => {
           {/* Brand Column */}
           <motion.div variants={itemVariants} className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Logo size="sm" className="text-2xl" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 OriginalLeeDunn
               </span>
             </div>
@@ -158,11 +157,11 @@ export const Footer = ({ className, ...props }: FooterProps) => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="mailto:hello@originalleedunn.me"
+                  href="mailto:OriginalLeeDunn@proton.me"
                   className="text-foreground/60 hover:text-accent transition-colors text-sm flex items-center"
                 >
                   <Mail className="mr-2 h-4 w-4" />
-                  hello@originalleedunn.me
+                  OriginalLeeDunn@proton.me
                 </a>
               </li>
               <li>

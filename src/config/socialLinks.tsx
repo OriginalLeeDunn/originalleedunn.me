@@ -44,7 +44,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/leedunn",
+    url: "https://linkedin.com/in/OriginalLeeDunn",
     icon: createIcon(Linkedin),
     color: "hover:text-blue-600",
   },
@@ -68,7 +68,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     name: "Discord",
-    url: "https://discord.gg/OriginalLeeDunn",
+    url: "https://discord.gg/7AAz6tavfN",
     icon: createIcon(MessageCircle),
     color: "hover:text-indigo-500",
   },

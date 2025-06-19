@@ -113,7 +113,7 @@ export default function Home() {
               <Twitter className="w-6 h-6" />
             </a>
             <a 
-              href="mailto:contact@originalleedunn.me" 
+              href="mailto:OriginalLeeDunn@proton.me" 
               className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Email"
             >
@@ -156,7 +156,7 @@ export default function Home() {
         className="bg-muted/50"
         showDivider
       >
-        <Projects />
+        
         <div className="mt-12 text-center">
           <Button 
             asChild 
