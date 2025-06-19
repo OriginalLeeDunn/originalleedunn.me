@@ -145,7 +145,7 @@ export default function Home() {
       >
         <div className="max-w-4xl mx-auto text-center">
           <p className="mb-6 text-lg text-muted-foreground">
-            I&apos;m a passionate developer with expertise in AI, game development, and web technologies. I love creating immersive experiences that push the boundaries of what&apos;s possible through code.
+            A <span className="text-primary font-medium">Rust enthusiast</span> and <span className="text-secondary font-medium">full-stack developer</span> with a passion for building high-performance applications. I specialize in creating seamless experiences that blend cutting-edge technology with intuitive design. When I'm not coding, you can find me exploring AI advancements or contributing to open-source projects.
           </p>
           <Button 
             asChild 
@@ -168,8 +168,14 @@ export default function Home() {
         className="bg-muted/50"
         showDivider
       >
+        <div className="max-w-4xl mx-auto text-center mb-10">
+          <p className="text-lg text-muted-foreground">
+            Exploring the intersection of <span className="text-primary font-medium">Rust-powered performance</span> and <span className="text-secondary font-medium">modern web technologies</span>.
+            Each project showcases my journey in building efficient, scalable solutions with a focus on clean code and user experience.
+          </p>
+        </div>
         
-        <div className="mt-12 text-center">
+        <div className="mt-4 text-center">
           <Button 
             asChild 
             variant="outline" 
@@ -193,7 +199,7 @@ export default function Home() {
       >
         <div className="max-w-4xl mx-auto text-center">
           <p className="mb-6 text-lg text-muted-foreground">
-            Check out my latest articles on web development, AI, and more.
+            Dive into my <span className="text-primary font-medium">technical writings</span> and <span className="text-secondary font-medium">tutorials</span> where I share insights on Rust, web development, AI, and system design. Each post is crafted to educate and inspire fellow developers on their coding journey.
           </p>
           <Button 
             asChild 
@@ -215,7 +221,26 @@ export default function Home() {
         subtitle="Let's work together"
         className="bg-muted/50"
       >
-        <ContactSection />
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="mb-8 text-lg text-muted-foreground">
+            Have a project in mind or want to collaborate? I'm always excited to discuss new opportunities. 
+            Whether it's about <span className="text-primary font-medium">Rust development</span>, 
+            <span className="text-secondary font-medium"> web solutions</span>, or just to say hello, 
+            I'll get back to you as soon as possible.
+          </p>
+          <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border border-border/50 shadow-sm">
+            <ContactSection />
+          </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            Prefer a direct approach? Email me at{' '}
+            <a 
+              href="mailto:OriginalLeeDunn@proton.me" 
+              className="text-primary hover:underline"
+            >
+              OriginalLeeDunn@proton.me
+            </a>
+          </p>
+        </div>
       </CustomSection>
     </div>
   );

@@ -298,7 +298,7 @@ export function BlogPostContent({
                         </Link>
                       ))}
                   </div>
-                  <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                  <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                     {post.meta.title}
                   </h1>
                   <div className="flex items-center text-sm text-muted-foreground">
@@ -365,7 +365,7 @@ export function BlogPostContent({
               <div className="mt-12 pt-8 border-t border-border/40">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                   <div>
-                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                       Enjoyed this article?
                     </h2>
                     <p className="text-muted-foreground">

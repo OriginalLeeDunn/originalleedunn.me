@@ -100,7 +100,7 @@ export function Contact() {
       </div>
 
       <motion.div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto px-4"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -207,9 +207,12 @@ export function Contact() {
         </motion.div>
 
         {/* Right Column - Contact Info */}
-        <motion.div variants={item} className="h-full">
-          <Card className="h-full border-border/20 bg-background/50 backdrop-blur-sm flex flex-col">
-            <CardHeader>
+        <motion.div
+          variants={item}
+          className="space-y-8 flex flex-col justify-center items-center lg:items-start text-center lg:text-left"
+        >
+          <Card className="w-full border-border/20 bg-background/50 backdrop-blur-sm">
+            <CardHeader className="text-center lg:text-left">
               <CardTitle className="text-2xl font-bold">
                 Contact Information
               </CardTitle>
@@ -217,56 +220,43 @@ export function Contact() {
                 Feel free to reach out through any of these channels.
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="p-2 rounded-full bg-primary/10 text-primary">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Email</h3>
-                    <a
-                      href={`mailto:${contactInfo.email}`}
-                      className="text-muted-foreground hover:text-foreground transition-colors text-sm"
-                    >
-                      {contactInfo.email}
-                    </a>
-                  </div>
+            <CardContent className="space-y-6">
+              <div className="flex flex-col items-center lg:items-start space-y-1">
+                <div className="flex items-center space-x-2 text-primary">
+                  <Mail className="w-5 h-5" />
+                  <h3 className="text-lg font-semibold">Email</h3>
                 </div>
+                <a
+                  href={`mailto:${contactInfo.email}`}
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  {contactInfo.email}
+                </a>
+              </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="p-2 rounded-full bg-primary/10 text-primary">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Location</h3>
-                    <p className="text-muted-foreground text-sm">
-                      {contactInfo.location}
-                    </p>
-                    <p className="text-muted-foreground/80 text-xs mt-1">
-                      {contactInfo.availability}
-                    </p>
-                  </div>
+              <div className="flex flex-col items-center lg:items-start space-y-1">
+                <div className="flex items-center space-x-2 text-primary">
+                  <MapPin className="w-5 h-5" />
+                  <h3 className="text-lg font-semibold">Location</h3>
                 </div>
+                <p className="text-muted-foreground text-sm">
+                  {contactInfo.location}
+                </p>
+                <p className="text-muted-foreground/80 text-xs">
+                  {contactInfo.availability}
+                </p>
               </div>
 
               <div className="pt-4 border-t border-border/20">
-                <h3 className="font-medium mb-3">Services</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {contactInfo.services.map((service, index) => (
-                    <motion.div
-                      key={index}
-                      className="flex items-center text-muted-foreground text-sm py-1"
-                      initial={{ opacity: 0, y: 5 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.05 * index }}
+                <h3 className="text-lg font-semibold mb-3 text-center lg:text-left">Services</h3>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+                  {contactInfo.services.map((service) => (
+                    <span
+                      key={service}
+                      className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20"
                     >
-                      <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2 flex-shrink-0"></span>
-                      <span className="truncate hover:text-foreground transition-colors">
-                        {service}
-                      </span>
-                    </motion.div>
+                      {service}
+                    </span>
                   ))}
                 </div>
               </div>

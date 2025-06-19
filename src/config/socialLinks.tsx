@@ -89,7 +89,7 @@ export const socialLinks: SocialLink[] = [
 // Contact information
 export const contactInfo: ContactInfo = {
   email: "OriginalLeeDunn@proton.me",
-  location: "San Francisco Bay Area, CA",
+  location: "Sea-Tac Area, WA",
   availability: "Available for freelance work",
   services: [
     "Web Development",
