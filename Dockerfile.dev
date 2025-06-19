@@ -1,0 +1,36 @@
+# Development Dockerfile
+FROM node:18-alpine
+
+# Install system dependencies for canvas and other native modules
+RUN apk add --no-cache --virtual .build-deps \
+    python3 \
+    make \
+    g++ \
+    pkgconfig \
+    pixman-dev \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    giflib-dev \
+    librsvg-dev \
+    pango \
+    jpeg \
+    giflib \
+    cairo \
+    && ln -sf python3 /usr/bin/python
+
+# Set the working directory
+WORKDIR /app
+
+# Install Node.js dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3001
+
+# Start the development server
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,1796 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Assistant - Interactive Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --primary-bg: #0a0a0a;
+        --secondary-bg: #121212;
+        --accent-green: #39ff14;
+        --accent-silver: #e5e4e2;
+        --accent-purple: #7f00ff;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+      }
+
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .neon-green {
+        color: var(--accent-green);
+        text-shadow:
+          0 0 5px rgba(57, 255, 20, 0.5),
+          0 0 10px rgba(57, 255, 20, 0.3);
+      }
+
+      .neon-purple {
+        color: var(--accent-purple);
+        text-shadow:
+          0 0 5px rgba(127, 0, 255, 0.5),
+          0 0 10px rgba(127, 0, 255, 0.3);
+      }
+
+      .neon-border {
+        border: 1px solid var(--accent-green);
+        box-shadow:
+          0 0 5px rgba(57, 255, 20, 0.5),
+          0 0 10px rgba(57, 255, 20, 0.3);
+      }
+
+      .neon-button {
+        background-color: transparent;
+        border: 1px solid var(--accent-green);
+        color: var(--accent-green);
+        text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+        box-shadow:
+          0 0 5px rgba(57, 255, 20, 0.5),
+          0 0 10px rgba(57, 255, 20, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .neon-button:hover {
+        background-color: rgba(57, 255, 20, 0.1);
+        box-shadow:
+          0 0 10px rgba(57, 255, 20, 0.7),
+          0 0 20px rgba(57, 255, 20, 0.5);
+      }
+
+      .glass-panel {
+        background-color: rgba(18, 18, 18, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(229, 228, 226, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-active {
+        display: block;
+      }
+
+      .section-inactive {
+        display: none;
+      }
+
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(57, 255, 20, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent-green);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .typing-animation::after {
+        content: "|";
+        animation: blink 1s step-end infinite;
+      }
+
+      @keyframes blink {
+        from,
+        to {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .feature-card {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+      }
+
+      .nav-tab {
+        position: relative;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .nav-tab::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-green);
+        transition: width 0.3s ease;
+      }
+
+      .nav-tab:hover::after,
+      .nav-tab.active::after {
+        width: 100%;
+      }
+
+      .nav-tab.active {
+        color: var(--accent-green);
+      }
+
+      /* Particle background */
+      #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <!-- Loading screen -->
+    <div
+      id="loading-screen"
+      class="fixed inset-0 flex flex-col items-center justify-center bg-black z-50"
+    >
+      <div class="loading-spinner mb-4"></div>
+      <h2 class="text-2xl font-bold neon-green mb-2">INITIALIZING SYSTEM</h2>
+      <div id="loading-text" class="typing-animation text-accent-silver">
+        Loading modules...
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-panel sticky top-0 z-40 py-4 px-6">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+          <h1 class="text-2xl font-bold neon-green mr-2">DIGITAL ASSISTANT</h1>
+          <span class="text-sm bg-gray-800 px-2 py-1 rounded">v1.0.0</span>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <div class="nav-tab active" data-section="home">Home Dashboard</div>
+          <div class="nav-tab" data-section="assistant">Assistant Panel</div>
+          <div class="nav-tab" data-section="pet">Pet Interaction</div>
+          <div class="nav-tab" data-section="battle">Battle Launch</div>
+          <div class="nav-tab" data-section="customize">Customization</div>
+        </nav>
+        <button
+          id="mobile-menu-button"
+          class="md:hidden neon-button px-3 py-1 rounded"
+        >
+          Menu
+        </button>
+      </div>
+      <!-- Mobile menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden mt-4 glass-panel rounded-lg p-4"
+      >
+        <div class="flex flex-col space-y-4">
+          <div class="nav-tab active" data-section="home">Home Dashboard</div>
+          <div class="nav-tab" data-section="assistant">Assistant Panel</div>
+          <div class="nav-tab" data-section="pet">Pet Interaction</div>
+          <div class="nav-tab" data-section="battle">Battle Launch</div>
+          <div class="nav-tab" data-section="customize">Customization</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Introduction -->
+      <section class="mb-12 text-center">
+        <h1 class="text-4xl font-bold mb-4">Interactive Demo</h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          Explore the features and interface of the Digital Assistant with this
+          interactive demo. Navigate through different sections using the tabs
+          above.
+        </p>
+      </section>
+
+      <!-- Home Dashboard Section -->
+      <section id="home" class="section-active mb-16">
+        <div class="glass-panel rounded-lg p-6 mb-8">
+          <h2 class="text-3xl font-bold mb-4 neon-green">Home Dashboard</h2>
+          <p class="text-gray-300 mb-6">
+            The central hub for your digital assistant, featuring system status,
+            recent activity, and quick access to all features.
+          </p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+          >
+            <!-- System Status Widget -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">System Status</h3>
+              <div class="flex justify-between mb-2">
+                <span>CPU Usage</span>
+                <span class="neon-green">32%</span>
+              </div>
+              <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                <div
+                  class="bg-green-500 h-2 rounded-full"
+                  style="width: 32%"
+                ></div>
+              </div>
+              <div class="flex justify-between mb-2">
+                <span>Memory</span>
+                <span class="neon-green">1.2 GB / 4 GB</span>
+              </div>
+              <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                <div
+                  class="bg-green-500 h-2 rounded-full"
+                  style="width: 30%"
+                ></div>
+              </div>
+              <div class="flex justify-between mb-2">
+                <span>Network</span>
+                <span class="neon-green">5.2 Mbps</span>
+              </div>
+              <div class="w-full bg-gray-800 rounded-full h-2">
+                <div
+                  class="bg-green-500 h-2 rounded-full"
+                  style="width: 65%"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Recent Activity Widget -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Recent Activity</h3>
+              <ul class="space-y-2">
+                <li class="flex justify-between">
+                  <span>Email Check</span>
+                  <span class="text-sm text-gray-400">2 min ago</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Calendar Update</span>
+                  <span class="text-sm text-gray-400">15 min ago</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Pet Training</span>
+                  <span class="text-sm text-gray-400">1 hour ago</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Battle Simulation</span>
+                  <span class="text-sm text-gray-400">3 hours ago</span>
+                </li>
+                <li class="flex justify-between">
+                  <span>Mood Journal Entry</span>
+                  <span class="text-sm text-gray-400">Yesterday</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quick Commands Widget -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Quick Commands</h3>
+              <div class="space-y-2">
+                <button class="w-full neon-button py-2 px-4 rounded text-left">
+                  Check Emails
+                </button>
+                <button class="w-full neon-button py-2 px-4 rounded text-left">
+                  Feed Pet
+                </button>
+                <button class="w-full neon-button py-2 px-4 rounded text-left">
+                  Start Battle
+                </button>
+                <button class="w-full neon-button py-2 px-4 rounded text-left">
+                  Add Todo
+                </button>
+                <button class="w-full neon-button py-2 px-4 rounded text-left">
+                  Check Wallet
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Command Input -->
+          <div class="glass-panel rounded-lg p-4">
+            <h3 class="text-xl font-bold mb-2">Command Input</h3>
+            <div class="flex">
+              <input
+                type="text"
+                placeholder="Enter a command..."
+                class="w-full bg-gray-900 border border-gray-700 rounded-l px-4 py-2 focus:outline-none focus:border-green-500"
+              />
+              <button class="neon-button px-4 py-2 rounded-r">Execute</button>
+            </div>
+            <div class="mt-4 bg-gray-900 rounded p-4 h-32 overflow-y-auto">
+              <div class="text-gray-400">> System initialized</div>
+              <div class="text-gray-400">> All modules loaded successfully</div>
+              <div class="text-gray-400">> Ready for input</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-green">
+                Floating Holographic Widgets
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Interactive widgets with holographic effects that provide quick
+                access to important information and controls.
+              </p>
+              <div
+                class="neon-border rounded-lg p-4 bg-opacity-20 bg-green-900"
+              >
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="text-sm text-gray-400">Current Weather</div>
+                    <div class="text-2xl font-bold">72°F</div>
+                    <div class="text-sm">Partly Cloudy</div>
+                  </div>
+                  <div class="text-4xl">☀️</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-purple">
+                Ambient Background
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Dynamic particle system that creates an immersive, futuristic
+                environment with subtle animations.
+              </p>
+              <div
+                class="neon-border border-purple-500 rounded-lg p-4 bg-opacity-20 bg-purple-900 h-32 relative overflow-hidden"
+              >
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-sm text-gray-300"
+                    >Particle system visualization</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Assistant Panel Section -->
+      <section id="assistant" class="section-inactive mb-16">
+        <div class="glass-panel rounded-lg p-6 mb-8">
+          <h2 class="text-3xl font-bold mb-4 neon-green">Assistant Panel</h2>
+          <p class="text-gray-300 mb-6">
+            Your AI companion with natural language processing capabilities,
+            ready to assist with tasks and provide information.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Assistant Profile -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <div class="flex flex-col items-center">
+                <div
+                  class="w-24 h-24 rounded-full bg-gray-800 mb-4 overflow-hidden relative"
+                >
+                  <div
+                    class="absolute inset-0 flex items-center justify-center"
+                  >
+                    <span class="text-4xl">🤖</span>
+                  </div>
+                  <div
+                    class="absolute inset-0 border-2 border-green-500 rounded-full animate-pulse opacity-50"
+                  ></div>
+                </div>
+                <h3 class="text-xl font-bold mb-1 neon-green">NEXUS</h3>
+                <p class="text-sm text-gray-400 mb-4">Digital Assistant v1.0</p>
+                <div class="w-full bg-gray-800 rounded-full h-2 mb-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 85%"
+                  ></div>
+                </div>
+                <p class="text-xs text-gray-400">System Efficiency: 85%</p>
+              </div>
+            </div>
+
+            <!-- Assistant Skills -->
+            <div class="glass-panel rounded-lg p-4 feature-card col-span-2">
+              <h3 class="text-xl font-bold mb-2">Assistant Capabilities</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Natural Language Processing</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Task Management</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Email Integration</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Calendar Management</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Web3 Monitoring</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Mood Analysis</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Pet Care Assistance</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span>Battle Strategy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Interface -->
+          <div class="glass-panel rounded-lg p-4">
+            <h3 class="text-xl font-bold mb-2">Assistant Chat</h3>
+            <div class="bg-gray-900 rounded p-4 h-64 overflow-y-auto mb-4">
+              <div class="mb-4">
+                <div class="text-sm text-gray-400 mb-1">You:</div>
+                <div class="bg-gray-800 rounded-lg p-3 inline-block">
+                  What's on my calendar today?
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="text-sm text-green-400 mb-1">NEXUS:</div>
+                <div
+                  class="bg-gray-800 border-l-4 border-green-500 rounded-lg p-3 inline-block"
+                >
+                  You have 3 events scheduled for today:
+                  <ul class="list-disc pl-5 mt-2">
+                    <li>9:00 AM - Team Meeting</li>
+                    <li>1:30 PM - Lunch with Alex</li>
+                    <li>4:00 PM - Project Review</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="text-sm text-gray-400 mb-1">You:</div>
+                <div class="bg-gray-800 rounded-lg p-3 inline-block">
+                  How is my pet doing?
+                </div>
+              </div>
+              <div>
+                <div class="text-sm text-green-400 mb-1">NEXUS:</div>
+                <div
+                  class="bg-gray-800 border-l-4 border-green-500 rounded-lg p-3 inline-block"
+                >
+                  Your pet is doing well! Current stats:
+                  <ul class="list-disc pl-5 mt-2">
+                    <li>Health: 92%</li>
+                    <li>Happiness: 85%</li>
+                    <li>Energy: 78%</li>
+                  </ul>
+                  It might be a good time to feed them soon.
+                </div>
+              </div>
+            </div>
+            <div class="flex">
+              <input
+                type="text"
+                placeholder="Ask something..."
+                class="w-full bg-gray-900 border border-gray-700 rounded-l px-4 py-2 focus:outline-none focus:border-green-500"
+              />
+              <button class="neon-button px-4 py-2 rounded-r">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-green">
+                Cyberpunk Interface
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Circuit-like connection lines and glowing text create an
+                immersive cyberpunk experience.
+              </p>
+              <div
+                class="neon-border rounded-lg p-4 bg-opacity-20 bg-green-900 h-32 relative"
+              >
+                <div
+                  class="absolute top-0 left-0 w-2 h-2 bg-green-500 rounded-full"
+                ></div>
+                <div
+                  class="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full"
+                ></div>
+                <div
+                  class="absolute bottom-0 left-0 w-2 h-2 bg-green-500 rounded-full"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full"
+                ></div>
+
+                <div
+                  class="absolute top-0 left-2 w-1/3 h-0.5 bg-green-500"
+                ></div>
+                <div
+                  class="absolute top-2 left-0 w-0.5 h-1/3 bg-green-500"
+                ></div>
+
+                <div
+                  class="absolute top-0 right-2 w-1/3 h-0.5 bg-green-500"
+                ></div>
+                <div
+                  class="absolute top-2 right-0 w-0.5 h-1/3 bg-green-500"
+                ></div>
+
+                <div
+                  class="absolute bottom-0 left-2 w-1/3 h-0.5 bg-green-500"
+                ></div>
+                <div
+                  class="absolute bottom-2 left-0 w-0.5 h-1/3 bg-green-500"
+                ></div>
+
+                <div
+                  class="absolute bottom-0 right-2 w-1/3 h-0.5 bg-green-500"
+                ></div>
+                <div
+                  class="absolute bottom-2 right-0 w-0.5 h-1/3 bg-green-500"
+                ></div>
+
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="neon-green text-lg">SYSTEM ACTIVE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-purple">
+                Animated Indicators
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Dynamic interaction indicators provide visual feedback during
+                assistant operations.
+              </p>
+              <div
+                class="neon-border border-purple-500 rounded-lg p-4 bg-opacity-20 bg-purple-900"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <span>Processing Query</span>
+                  <div class="flex space-x-1">
+                    <div class="w-2 h-8 bg-purple-500 animate-pulse"></div>
+                    <div
+                      class="w-2 h-8 bg-purple-500 animate-pulse"
+                      style="animation-delay: 0.2s"
+                    ></div>
+                    <div
+                      class="w-2 h-8 bg-purple-500 animate-pulse"
+                      style="animation-delay: 0.4s"
+                    ></div>
+                    <div
+                      class="w-2 h-8 bg-purple-500 animate-pulse"
+                      style="animation-delay: 0.6s"
+                    ></div>
+                    <div
+                      class="w-2 h-8 bg-purple-500 animate-pulse"
+                      style="animation-delay: 0.8s"
+                    ></div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>Voice Recognition</span>
+                  <div class="w-32 h-8 bg-gray-800 rounded overflow-hidden">
+                    <div class="h-full flex items-end justify-around">
+                      <div class="w-1 h-2/3 bg-purple-500 animate-pulse"></div>
+                      <div
+                        class="w-1 h-1/3 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.1s"
+                      ></div>
+                      <div
+                        class="w-1 h-full bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.2s"
+                      ></div>
+                      <div
+                        class="w-1 h-1/2 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.3s"
+                      ></div>
+                      <div
+                        class="w-1 h-3/4 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.4s"
+                      ></div>
+                      <div
+                        class="w-1 h-1/4 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.5s"
+                      ></div>
+                      <div
+                        class="w-1 h-2/3 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.6s"
+                      ></div>
+                      <div
+                        class="w-1 h-1/3 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.7s"
+                      ></div>
+                      <div
+                        class="w-1 h-3/4 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.8s"
+                      ></div>
+                      <div
+                        class="w-1 h-1/2 bg-purple-500 animate-pulse"
+                        style="animation-delay: 0.9s"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pet Interaction Hub Section -->
+      <section id="pet" class="section-inactive mb-16">
+        <div class="glass-panel rounded-lg p-6 mb-8">
+          <h2 class="text-3xl font-bold mb-4 neon-green">
+            Pet Interaction Hub
+          </h2>
+          <p class="text-gray-300 mb-6">
+            Manage and interact with your virtual pet companion, monitoring
+            their status and development.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Pet Display -->
+            <div class="glass-panel rounded-lg p-4 feature-card col-span-1">
+              <div class="flex flex-col items-center">
+                <div
+                  class="w-32 h-32 rounded-lg bg-gray-800 mb-4 overflow-hidden relative"
+                >
+                  <div
+                    class="absolute inset-0 flex items-center justify-center"
+                  >
+                    <span class="text-5xl">🐉</span>
+                  </div>
+                  <div
+                    class="absolute inset-0 border-2 border-green-500 rounded-lg"
+                  ></div>
+                </div>
+                <h3 class="text-xl font-bold mb-1 neon-green">NOVA</h3>
+                <p class="text-sm text-gray-400 mb-2">
+                  Cyber Dragon • Level 12
+                </p>
+                <div class="flex space-x-2 mb-4">
+                  <span class="bg-gray-800 text-xs px-2 py-1 rounded"
+                    >Tech</span
+                  >
+                  <span class="bg-gray-800 text-xs px-2 py-1 rounded"
+                    >Fire</span
+                  >
+                  <span class="bg-gray-800 text-xs px-2 py-1 rounded"
+                    >Flying</span
+                  >
+                </div>
+                <p class="text-xs text-gray-400">Evolution Progress</p>
+                <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 65%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pet Stats -->
+            <div class="glass-panel rounded-lg p-4 feature-card col-span-2">
+              <h3 class="text-xl font-bold mb-2">Pet Status</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span>Health</span>
+                    <span class="neon-green">92%</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2 mb-3">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 92%"
+                    ></div>
+                  </div>
+
+                  <div class="flex justify-between mb-1">
+                    <span>Happiness</span>
+                    <span class="neon-green">85%</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2 mb-3">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 85%"
+                    ></div>
+                  </div>
+
+                  <div class="flex justify-between mb-1">
+                    <span>Energy</span>
+                    <span class="neon-green">78%</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span>Intelligence</span>
+                    <span class="neon-green">65</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2 mb-3">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 65%"
+                    ></div>
+                  </div>
+
+                  <div class="flex justify-between mb-1">
+                    <span>Strength</span>
+                    <span class="neon-green">78</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2 mb-3">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+
+                  <div class="flex justify-between mb-1">
+                    <span>Agility</span>
+                    <span class="neon-green">92</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2">
+                    <div
+                      class="bg-green-500 h-2 rounded-full"
+                      style="width: 92%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-2">Skills</h3>
+              <div class="grid grid-cols-2 gap-2">
+                <div
+                  class="bg-gray-800 rounded p-2 flex justify-between items-center"
+                >
+                  <span>Firebreath</span>
+                  <span class="text-xs bg-green-900 px-2 py-1 rounded"
+                    >Lvl 8</span
+                  >
+                </div>
+                <div
+                  class="bg-gray-800 rounded p-2 flex justify-between items-center"
+                >
+                  <span>Data Hack</span>
+                  <span class="text-xs bg-green-900 px-2 py-1 rounded"
+                    >Lvl 6</span
+                  >
+                </div>
+                <div
+                  class="bg-gray-800 rounded p-2 flex justify-between items-center"
+                >
+                  <span>Sonic Dash</span>
+                  <span class="text-xs bg-green-900 px-2 py-1 rounded"
+                    >Lvl 9</span
+                  >
+                </div>
+                <div
+                  class="bg-gray-800 rounded p-2 flex justify-between items-center"
+                >
+                  <span>Shield Matrix</span>
+                  <span class="text-xs bg-green-900 px-2 py-1 rounded"
+                    >Lvl 5</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pet Interaction Controls -->
+          <div class="glass-panel rounded-lg p-4">
+            <h3 class="text-xl font-bold mb-2">Interaction Controls</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🍖</span> Feed
+              </button>
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🏋️</span> Train
+              </button>
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">😴</span> Rest
+              </button>
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🎮</span> Play
+              </button>
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🧪</span> Evolve
+              </button>
+              <button
+                class="neon-button py-2 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🎭</span> Customize
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-green">
+                Translucent Interaction Zones
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Interactive areas with translucent effects for intuitive pet
+                interaction.
+              </p>
+              <div
+                class="neon-border rounded-lg p-4 bg-opacity-20 bg-green-900 relative"
+              >
+                <div class="grid grid-cols-2 gap-4">
+                  <div
+                    class="bg-black bg-opacity-50 backdrop-blur-sm border border-green-500 rounded p-3 flex items-center justify-center"
+                  >
+                    <span>Feed Zone</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 backdrop-blur-sm border border-green-500 rounded p-3 flex items-center justify-center"
+                  >
+                    <span>Play Zone</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 backdrop-blur-sm border border-green-500 rounded p-3 flex items-center justify-center"
+                  >
+                    <span>Train Zone</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 backdrop-blur-sm border border-green-500 rounded p-3 flex items-center justify-center"
+                  >
+                    <span>Rest Zone</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-purple">
+                Pulsing Status Indicators
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Dynamic health and status indicators with pulsing neon effects.
+              </p>
+              <div
+                class="neon-border border-purple-500 rounded-lg p-4 bg-opacity-20 bg-purple-900"
+              >
+                <div class="flex items-center mb-4">
+                  <div
+                    class="w-4 h-4 rounded-full bg-green-500 mr-2 animate-pulse"
+                  ></div>
+                  <span>Health Optimal</span>
+                </div>
+                <div class="flex items-center mb-4">
+                  <div
+                    class="w-4 h-4 rounded-full bg-yellow-500 mr-2 animate-pulse"
+                  ></div>
+                  <span>Energy Moderate</span>
+                </div>
+                <div class="flex items-center">
+                  <div
+                    class="w-4 h-4 rounded-full bg-blue-500 mr-2 animate-pulse"
+                  ></div>
+                  <span>Training Ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Battle Launch UI Section -->
+      <section id="battle" class="section-inactive mb-16">
+        <div class="glass-panel rounded-lg p-6 mb-8">
+          <h2 class="text-3xl font-bold mb-4 neon-green">Battle Launch UI</h2>
+          <p class="text-gray-300 mb-6">
+            Prepare for battle with opponent selection, loadout customization,
+            and battle controls.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Battle Arena -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Battle Arena</h3>
+              <div
+                class="bg-gray-900 rounded-lg p-4 h-64 relative overflow-hidden"
+              >
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold neon-green mb-2">
+                      ARENA SELECTION
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                      <button class="neon-button py-2 px-4 rounded">
+                        Cyber Grid
+                      </button>
+                      <button class="neon-button py-2 px-4 rounded">
+                        Neon City
+                      </button>
+                      <button class="neon-button py-2 px-4 rounded">
+                        Data Void
+                      </button>
+                      <button class="neon-button py-2 px-4 rounded">
+                        Tech Forest
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Opponent Selection -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Opponent Selection</h3>
+              <div class="space-y-2">
+                <div
+                  class="bg-gray-800 rounded p-3 flex justify-between items-center"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 rounded bg-gray-700 flex items-center justify-center mr-3"
+                    >
+                      <span>🤖</span>
+                    </div>
+                    <div>
+                      <div class="font-bold">ShadowByte</div>
+                      <div class="text-xs text-gray-400">
+                        Level 10 • Tech Type
+                      </div>
+                    </div>
+                  </div>
+                  <button class="neon-button py-1 px-3 rounded text-sm">
+                    Select
+                  </button>
+                </div>
+
+                <div
+                  class="bg-gray-800 rounded p-3 flex justify-between items-center"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 rounded bg-gray-700 flex items-center justify-center mr-3"
+                    >
+                      <span>🦊</span>
+                    </div>
+                    <div>
+                      <div class="font-bold">PixelFox</div>
+                      <div class="text-xs text-gray-400">
+                        Level 12 • Speed Type
+                      </div>
+                    </div>
+                  </div>
+                  <button class="neon-button py-1 px-3 rounded text-sm">
+                    Select
+                  </button>
+                </div>
+
+                <div
+                  class="bg-gray-800 rounded p-3 flex justify-between items-center"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 rounded bg-gray-700 flex items-center justify-center mr-3"
+                    >
+                      <span>🐙</span>
+                    </div>
+                    <div>
+                      <div class="font-bold">DataKraken</div>
+                      <div class="text-xs text-gray-400">
+                        Level 15 • Power Type
+                      </div>
+                    </div>
+                  </div>
+                  <button class="neon-button py-1 px-3 rounded text-sm">
+                    Select
+                  </button>
+                </div>
+
+                <div
+                  class="bg-gray-800 rounded p-3 flex justify-between items-center"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 rounded bg-gray-700 flex items-center justify-center mr-3"
+                    >
+                      <span>🦅</span>
+                    </div>
+                    <div>
+                      <div class="font-bold">NeonHawk</div>
+                      <div class="text-xs text-gray-400">
+                        Level 14 • Flying Type
+                      </div>
+                    </div>
+                  </div>
+                  <button class="neon-button py-1 px-3 rounded text-sm">
+                    Select
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Battle Controls -->
+          <div class="glass-panel rounded-lg p-4 mb-8">
+            <h3 class="text-xl font-bold mb-2">Battle Controls</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                class="neon-button py-3 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">⚔️</span> Attack (A)
+              </button>
+              <button
+                class="neon-button py-3 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">🛡️</span> Defend (D)
+              </button>
+              <button
+                class="neon-button py-3 px-4 rounded flex items-center justify-center"
+              >
+                <span class="mr-2">✨</span> Special Move (S)
+              </button>
+            </div>
+          </div>
+
+          <!-- Chip Loadout -->
+          <div class="glass-panel rounded-lg p-4">
+            <h3 class="text-xl font-bold mb-2">Chip Loadout</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-gray-800 rounded p-3 text-center">
+                <div
+                  class="w-12 h-12 mx-auto rounded bg-gray-700 flex items-center justify-center mb-2"
+                >
+                  <span>🔥</span>
+                </div>
+                <div class="font-bold">Fire Chip</div>
+                <div class="text-xs text-gray-400">+25% Fire Damage</div>
+              </div>
+
+              <div class="bg-gray-800 rounded p-3 text-center">
+                <div
+                  class="w-12 h-12 mx-auto rounded bg-gray-700 flex items-center justify-center mb-2"
+                >
+                  <span>⚡</span>
+                </div>
+                <div class="font-bold">Speed Chip</div>
+                <div class="text-xs text-gray-400">+15% Agility</div>
+              </div>
+
+              <div class="bg-gray-800 rounded p-3 text-center">
+                <div
+                  class="w-12 h-12 mx-auto rounded bg-gray-700 flex items-center justify-center mb-2"
+                >
+                  <span>🛡️</span>
+                </div>
+                <div class="font-bold">Shield Chip</div>
+                <div class="text-xs text-gray-400">+20% Defense</div>
+              </div>
+
+              <div class="bg-gray-800 rounded p-3 text-center">
+                <div
+                  class="w-12 h-12 mx-auto rounded bg-gray-700 flex items-center justify-center mb-2"
+                >
+                  <span>🧠</span>
+                </div>
+                <div class="font-bold">Hack Chip</div>
+                <div class="text-xs text-gray-400">+10% Critical</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-green">
+                Aggressive Neon Outlines
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Bold, high-contrast neon borders create an energetic battle
+                interface.
+              </p>
+              <div
+                class="neon-border rounded-lg p-4 bg-opacity-20 bg-green-900 relative"
+              >
+                <div
+                  class="border-2 border-green-500 rounded-lg p-4 flex items-center justify-center shadow-lg"
+                  style="box-shadow: 0 0 15px rgba(57, 255, 20, 0.5)"
+                >
+                  <span class="text-xl font-bold neon-green">BATTLE READY</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-purple">
+                Dynamic Loading Animations
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Engaging animations for battle preparation and transitions.
+              </p>
+              <div
+                class="neon-border border-purple-500 rounded-lg p-4 bg-opacity-20 bg-purple-900"
+              >
+                <div class="flex flex-col items-center">
+                  <div class="mb-4">
+                    <div
+                      class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"
+                    ></div>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-2 mb-2">
+                    <div
+                      class="bg-purple-500 h-2 rounded-full animate-pulse"
+                      style="width: 75%"
+                    ></div>
+                  </div>
+                  <div class="text-sm text-purple-400">
+                    Loading Battle Environment...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customization Panel Section -->
+      <section id="customize" class="section-inactive mb-16">
+        <div class="glass-panel rounded-lg p-6 mb-8">
+          <h2 class="text-3xl font-bold mb-4 neon-green">
+            Customization Panel
+          </h2>
+          <p class="text-gray-300 mb-6">
+            Personalize your digital assistant interface with appearance
+            settings and color schemes.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Appearance Settings -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Appearance Settings</h3>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Interface Style</label>
+                <select
+                  class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2"
+                >
+                  <option>Cyberpunk</option>
+                  <option>Minimalist</option>
+                  <option>Holographic</option>
+                  <option>Retro</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Font Style</label>
+                <select
+                  class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2"
+                >
+                  <option>Orbitron</option>
+                  <option>Rajdhani</option>
+                  <option>Share Tech Mono</option>
+                  <option>Exo 2</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Animation Speed</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="75"
+                  class="w-full"
+                />
+                <div class="flex justify-between text-xs text-gray-400">
+                  <span>Slow</span>
+                  <span>Fast</span>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Particle Density</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="50"
+                  class="w-full"
+                />
+                <div class="flex justify-between text-xs text-gray-400">
+                  <span>Low</span>
+                  <span>High</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm mb-1">Glow Intensity</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="65"
+                  class="w-full"
+                />
+                <div class="flex justify-between text-xs text-gray-400">
+                  <span>Subtle</span>
+                  <span>Intense</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Color Scheme -->
+            <div class="glass-panel rounded-lg p-4 feature-card">
+              <h3 class="text-xl font-bold mb-2">Color Scheme</h3>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Preset Themes</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <button
+                    class="bg-gray-900 border border-green-500 h-10 rounded"
+                  ></button>
+                  <button
+                    class="bg-gray-900 border border-blue-500 h-10 rounded"
+                  ></button>
+                  <button
+                    class="bg-gray-900 border border-purple-500 h-10 rounded"
+                  ></button>
+                  <button
+                    class="bg-gray-900 border border-red-500 h-10 rounded"
+                  ></button>
+                  <button
+                    class="bg-gray-900 border border-yellow-500 h-10 rounded"
+                  ></button>
+                  <button
+                    class="bg-gray-900 border border-pink-500 h-10 rounded"
+                  ></button>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Primary Accent</label>
+                <div class="flex">
+                  <div class="w-10 h-10 bg-green-500 rounded-l"></div>
+                  <input
+                    type="text"
+                    value="#39FF14"
+                    class="flex-1 bg-gray-900 border border-gray-700 rounded-r px-4 py-2"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Secondary Accent</label>
+                <div class="flex">
+                  <div class="w-10 h-10 bg-gray-300 rounded-l"></div>
+                  <input
+                    type="text"
+                    value="#E5E4E2"
+                    class="flex-1 bg-gray-900 border border-gray-700 rounded-r px-4 py-2"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-sm mb-1">Background Darkness</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="95"
+                  class="w-full"
+                />
+                <div class="flex justify-between text-xs text-gray-400">
+                  <span>Lighter</span>
+                  <span>Darker</span>
+                </div>
+              </div>
+
+              <button class="neon-button py-2 px-4 rounded w-full mt-4">
+                Apply Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="glass-panel rounded-lg p-4">
+            <h3 class="text-xl font-bold mb-2">Live Preview</h3>
+            <div
+              class="bg-gray-900 rounded-lg p-4 h-64 relative overflow-hidden"
+            >
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="text-2xl font-bold neon-green mb-2">
+                    PREVIEW MODE
+                  </div>
+                  <p class="text-gray-400 mb-4">
+                    Changes will be reflected here in real-time
+                  </p>
+                  <div class="flex justify-center space-x-4">
+                    <button class="neon-button py-2 px-4 rounded">
+                      Save Theme
+                    </button>
+                    <button
+                      class="bg-gray-800 border border-gray-600 text-gray-300 py-2 px-4 rounded"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Key Features</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-green">
+                Modular Grid Layout
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Flexible grid-based design for intuitive customization options.
+              </p>
+              <div
+                class="neon-border rounded-lg p-4 bg-opacity-20 bg-green-900"
+              >
+                <div class="grid grid-cols-3 gap-2">
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center"
+                  >
+                    <span class="text-xs">Module 1</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center"
+                  >
+                    <span class="text-xs">Module 2</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center"
+                  >
+                    <span class="text-xs">Module 3</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center col-span-2"
+                  >
+                    <span class="text-xs">Module 4</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center"
+                  >
+                    <span class="text-xs">Module 5</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center"
+                  >
+                    <span class="text-xs">Module 6</span>
+                  </div>
+                  <div
+                    class="bg-black bg-opacity-50 border border-green-500 rounded p-2 flex items-center justify-center col-span-2"
+                  >
+                    <span class="text-xs">Module 7</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-lg p-6 feature-card">
+              <h4 class="text-xl font-bold mb-2 neon-purple">
+                Interactive Sliders
+              </h4>
+              <p class="text-gray-300 mb-4">
+                Responsive sliders with neon glow effects for precise
+                adjustments.
+              </p>
+              <div
+                class="neon-border border-purple-500 rounded-lg p-4 bg-opacity-20 bg-purple-900"
+              >
+                <div class="mb-4">
+                  <label class="block text-sm mb-1">Neon Intensity</label>
+                  <div class="relative">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value="70"
+                      class="w-full"
+                    />
+                    <div
+                      class="absolute left-0 right-0 top-0 bottom-0 pointer-events-none flex items-center"
+                    >
+                      <div
+                        class="h-4 bg-purple-500 rounded-full opacity-50"
+                        style="
+                          width: 70%;
+                          box-shadow: 0 0 10px rgba(127, 0, 255, 0.7);
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">Animation Speed</label>
+                  <div class="relative">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value="40"
+                      class="w-full"
+                    />
+                    <div
+                      class="absolute left-0 right-0 top-0 bottom-0 pointer-events-none flex items-center"
+                    >
+                      <div
+                        class="h-4 bg-purple-500 rounded-full opacity-50"
+                        style="
+                          width: 40%;
+                          box-shadow: 0 0 10px rgba(127, 0, 255, 0.7);
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboard Shortcuts Section -->
+      <section class="mb-16">
+        <div class="glass-panel rounded-lg p-6">
+          <h2 class="text-3xl font-bold mb-4 neon-green">Keyboard Shortcuts</h2>
+          <p class="text-gray-300 mb-6">
+            Master the digital assistant with these keyboard shortcuts for
+            efficient navigation and control.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-xl font-bold mb-2">Global</h3>
+              <div class="space-y-2 mb-6">
+                <div class="flex justify-between items-center">
+                  <span>Show help modal</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">?</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Close dialogs</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">Escape</span>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-2">Navigation</h3>
+              <div class="space-y-2 mb-6">
+                <div class="flex justify-between items-center">
+                  <span>Go to Home</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">h</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Go to Pet section</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">p</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Go to Battle section</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">b</span>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-2">Command</h3>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                  <span>Execute command</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">Ctrl+Enter</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Clear command history</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">Ctrl+l</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-xl font-bold mb-2">Pet</h3>
+              <div class="space-y-2 mb-6">
+                <div class="flex justify-between items-center">
+                  <span>Feed pet</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">f</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Train pet</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">t</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Rest pet</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">r</span>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-2">Battle</h3>
+              <div class="space-y-2 mb-6">
+                <div class="flex justify-between items-center">
+                  <span>Attack</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">a</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Defend</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">d</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Special move</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">s</span>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-2">Accessibility</h3>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                  <span>Toggle sound</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">Ctrl+m</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>Toggle animations</span>
+                  <span class="bg-gray-800 px-3 py-1 rounded">Ctrl+b</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Installation and Setup Section -->
+      <section class="mb-16">
+        <div class="glass-panel rounded-lg p-6">
+          <h2 class="text-3xl font-bold mb-4 neon-green">
+            Installation and Setup
+          </h2>
+          <p class="text-gray-300 mb-6">
+            Get started with the Digital Assistant by following these simple
+            steps.
+          </p>
+
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">Prerequisites</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-300">
+              <li>Node.js 18+ or 20+</li>
+              <li>npm or yarn</li>
+            </ul>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">Installation Steps</h3>
+            <div class="bg-gray-900 rounded-lg p-4 mb-4">
+              <div class="mb-2 text-gray-400"># Clone the repository</div>
+              <div class="font-mono text-sm">
+                git clone https://github.com/yourusername/digital-assistant.git
+              </div>
+              <div class="font-mono text-sm">cd digital-assistant</div>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4 mb-4">
+              <div class="mb-2 text-gray-400"># Install dependencies</div>
+              <div class="font-mono text-sm">npm install</div>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4 mb-4">
+              <div class="mb-2 text-gray-400">
+                # Start the development server
+              </div>
+              <div class="font-mono text-sm">npm run dev</div>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4 mb-4">
+              <div class="mb-2 text-gray-400"># Build for production</div>
+              <div class="font-mono text-sm">npm run build</div>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4">
+              <div class="mb-2 text-gray-400">
+                # Preview the production build
+              </div>
+              <div class="font-mono text-sm">npm run preview</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-panel py-6 px-6">
+      <div class="container mx-auto text-center">
+        <p class="text-gray-400">
+          Digital Assistant with Neon Dark UI • v1.0.0
+        </p>
+        <p class="text-sm text-gray-500 mt-2">© 2025 • All Rights Reserved</p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      // Initialize particle background
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof particlesJS !== "undefined") {
+          particlesJS("particles-js", {
+            particles: {
+              number: { value: 80, density: { enable: true, value_area: 800 } },
+              color: { value: "#39FF14" },
+              shape: { type: "circle" },
+              opacity: { value: 0.5, random: true },
+              size: { value: 3, random: true },
+              line_linked: {
+                enable: true,
+                distance: 150,
+                color: "#39FF14",
+                opacity: 0.2,
+                width: 1,
+              },
+              move: {
+                enable: true,
+                speed: 1,
+                direction: "none",
+                random: true,
+                straight: false,
+                out_mode: "out",
+                bounce: false,
+              },
+            },
+            interactivity: {
+              detect_on: "canvas",
+              events: {
+                onhover: { enable: true, mode: "grab" },
+                onclick: { enable: true, mode: "push" },
+                resize: true,
+              },
+              modes: {
+                grab: { distance: 140, line_linked: { opacity: 0.5 } },
+                push: { particles_nb: 4 },
+              },
+            },
+            retina_detect: true,
+          });
+        }
+
+        // Simulate loading screen
+        setTimeout(() => {
+          document.getElementById("loading-screen").style.opacity = "0";
+          setTimeout(() => {
+            document.getElementById("loading-screen").style.display = "none";
+          }, 500);
+        }, 2000);
+
+        // Navigation tabs
+        const navTabs = document.querySelectorAll(".nav-tab");
+        const sections = document.querySelectorAll("section[id]");
+
+        navTabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const targetSection = tab.getAttribute("data-section");
+
+            // Update active tab
+            navTabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            // Show target section, hide others
+            sections.forEach((section) => {
+              if (section.id === targetSection) {
+                section.classList.remove("section-inactive");
+                section.classList.add("section-active");
+              } else if (section.id) {
+                section.classList.remove("section-active");
+                section.classList.add("section-inactive");
+              }
+            });
+
+            // Close mobile menu if open
+            document.getElementById("mobile-menu").classList.add("hidden");
+          });
+        });
+
+        // Mobile menu toggle
+        document
+          .getElementById("mobile-menu-button")
+          .addEventListener("click", () => {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+          });
+
+        // Simulate typing animation for loading text
+        const loadingText = document.getElementById("loading-text");
+        const loadingMessages = [
+          "Loading modules...",
+          "Initializing interface...",
+          "Connecting to network...",
+          "Loading user preferences...",
+          "Starting digital assistant...",
+        ];
+
+        let messageIndex = 0;
+        const typeInterval = setInterval(() => {
+          messageIndex = (messageIndex + 1) % loadingMessages.length;
+          loadingText.textContent = loadingMessages[messageIndex];
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(typeInterval);
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>
