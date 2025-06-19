@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Logo } from "./Logo";
 import { handleAnchorClick } from "@/lib/smooth-scroll";
 
@@ -88,21 +89,25 @@ export function Navbar() {
           : "py-4 border-transparent",
       )}
     >
-      <div className="container flex items-center justify-between px-4 mx-auto">
-        {/* Logo */}
-        <div className="flex items-center">
-          <Logo 
-            href="/" 
-            size="md" 
-            className="group"
-            onClick={(e) => {
-              if (pathname === "/") {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
-            }}
-          />
-        </div>
+      <div className="container flex items-center justify-between h-full px-4 mx-auto">
+        <Link 
+          href="/" 
+          className="flex items-center space-x-3"
+          onClick={() => setActiveSection('#home')}
+        >
+          <div className="relative w-10 h-10 md:w-12 md:h-12">
+            <Image 
+              src="/images/logo-Transparent.webp" 
+              alt="OriginalLeeDunn Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hidden sm:inline-block">
+            OriginalLeeDunn
+          </span>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">

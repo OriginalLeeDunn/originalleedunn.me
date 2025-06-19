@@ -65,7 +65,7 @@ export function ThemeToggle({
   };
 
   const getThemeIcon = () => {
-    if (isSystem) return <Monitor className="h-5 w-5" />;
+    if (isSystem) return <Moon className="h-5 w-5" />;
     return isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />;
   };
 

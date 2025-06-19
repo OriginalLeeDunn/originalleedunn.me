@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { GradientText } from "@/components/gradient-text";
@@ -36,14 +37,25 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-30"></div>
         
         <div className="container relative z-10 px-4 mx-auto text-center">
-          <div className="mb-6">
-            <div className="inline-flex items-center px-4 py-1.5 mb-8 text-sm font-medium rounded-full bg-secondary/10 text-secondary border border-secondary/20">
+          <div className="mb-1.3">
+            <div className="inline-flex items-center px-4 py-1.5 mb-4 text-sm font-medium rounded-full bg-secondary/10 text-secondary border border-secondary/20">
               <span className="relative flex w-2 h-2 mr-2">
                 <span className="absolute inline-flex w-full h-full rounded-full bg-secondary/80 animate-ping"></span>
                 <span className="relative inline-flex w-2 h-2 rounded-full bg-secondary"></span>
               </span>
               Welcome to my portfolio
             </div>
+          </div>
+          
+          {/* Logo */}
+          <div className="relative w-32 h-32 mb-6 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto">
+            <Image
+              src="/images/logo-Transparent.webp"
+              alt="OriginalLeeDunn Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           
           <div className="relative inline-block">

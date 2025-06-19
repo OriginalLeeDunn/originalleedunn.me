@@ -40,7 +40,7 @@ async function generatePlaceholderImage(title: string, outputPath: string) {
   // Add gradient overlay
   const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
   gradient.addColorStop(0, `${COLORS.primary}40`);
-  gradient.addColorStop(1, `${COLORS.accent}40`);
+  gradient.addColorStop(1, `${COLORS.secondary}40`);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 

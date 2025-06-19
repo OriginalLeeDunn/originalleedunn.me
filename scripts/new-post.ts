@@ -93,12 +93,15 @@ draft: ${isDraft}
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext("2d");
 
-    // Draw background
-    ctx.fillStyle = "#0F172A";
+    // Draw background with brand color gradient
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, "#B7410E"); // Rust Orange
+    gradient.addColorStop(1, "#39FF14"); // Terminal Green
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Add title text
-    ctx.fillStyle = "#FFFFFF";
+    // Add title text with better contrast
+    ctx.fillStyle = "#FFFFFF"; // White text for better contrast
     ctx.font = "bold 48px Arial";
     ctx.textAlign = "center";
 
