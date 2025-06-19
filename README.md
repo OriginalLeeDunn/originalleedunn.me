@@ -1,6 +1,74 @@
-# OriginalLeeDunn - Portfolio
+# OriginalLeeDunn.me - Personal Portfolio
 
-A modern, interactive portfolio website showcasing my work as an AI & Game Developer, Full-Stack Engineer, and Creative Technologist. Built with Next.js, TypeScript, and Tailwind CSS.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FOriginalLeeDunn%2Foriginalleedunn.me&project-name=originalleedunn&repository-name=originalleedunn.me&demo-title=OriginalLeeDunn%20Portfolio&demo-description=A%20modern%20portfolio%20website%20built%20with%20Next.js%20and%20Tailwind%20CSS&demo-url=https%3A%2F%2Foriginalleedunn.me&demo-image=https%3A%2F%2Foriginalleedunn.me%2Fimages%2Fog-image.jpg)
+
+Welcome to my personal portfolio website built with Next.js, TypeScript, and Tailwind CSS, deployed on Vercel.
+
+## 🚀 Deployment
+
+This project is optimized for deployment on [Vercel](https://vercel.com/).
+
+### Prerequisites
+
+- Node.js 18.x or later
+- npm 9.x or later
+- Vercel account
+
+### Deploy to Vercel
+
+1. Click the "Deploy with Vercel" button above, or
+2. Push to the `prod` branch to trigger automatic deployment
+
+### Environment Variables
+
+Create a `.env.local` file with the following variables:
+
+```env
+# Required for production
+NEXT_PUBLIC_SITE_URL=https://your-vercel-app.vercel.app
+
+# Optional
+ANALYZE=false  # Set to true to enable bundle analysis
+```
+
+## 🛠 Development
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+### Build for Production
+
+```bash
+# Build the application
+npm run build
+
+# Start production server
+npm start
+```
+
+## 📦 Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) 14
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [NextUI](https://nextui.org/)
+- **Type Checking**: [TypeScript](https://www.typescriptlang.org/)
+- **Content**: [MDX](https://mdxjs.com/)
+- **Deployment**: [Vercel](https://vercel.com/)
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Built with ❤️ by [OriginalLeeDunn](https://github.com/OriginalLeeDunn)
 
 ## 🏗 Project Structure
 

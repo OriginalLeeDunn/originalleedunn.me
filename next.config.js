@@ -1,28 +1,42 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-  openAnalyzer: false,
+const withMDX = require('@next/mdx')();
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable React's concurrent features
   reactStrictMode: true,
-
-  // Use SWC minification (faster than Terser)
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  experimental: {
+    mdxRs: true,
+    // Enable modern browser optimizations
+    optimizeCss: true,
+    optimizePackageImports: [
+      '@nextui-org/react',
+      'react-icons',
+      '@radix-ui/react-dialog',
+      'lucide-react',
+    ],
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
+  },
+  images: {
+    domains: [
+      "images.unsplash.com",
+      "source.unsplash.com",
+      "res.cloudinary.com",
+      "avatars.githubusercontent.com",
+      "lh3.googleusercontent.com",
+    ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+  },
+  // Enable React 18 streaming
   swcMinify: true,
-
-  // Optimize font loading
-  optimizeFonts: true,
-
-  // Enable gzip and brotli compression
-  compress: true,
-
-  // Enable static page generation for 404 page
-  generateEtags: true,
-
-  // Enable cross-origin for fonts
-  crossOrigin: "anonymous",
+  // Enable static exports for static site generation
+  output: 'standalone',
 
   // Configure headers
   async headers() {
