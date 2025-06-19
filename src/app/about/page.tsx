@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { RustExpertise } from "@/components/RustExpertise";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import SpaceBackground from "@/components/ui/SpaceBackground";
 
 export const metadata: Metadata = {
   title: "About Me | OriginalLeeDunn",
@@ -13,9 +14,11 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="space-y-12">
-      <div className="container py-12">
-        <div className="max-w-4xl mx-auto">
+    <div className="relative min-h-screen">
+      <SpaceBackground />
+      <div className="relative z-10 space-y-12">
+        <div className="container py-12">
+          <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
           <div className="flex flex-col items-center text-center mb-12">
             <div className="relative w-40 h-40 mb-6 rounded-full overflow-hidden border-4 border-primary/30">
@@ -47,7 +50,7 @@ export default function AboutPage() {
               </Button>
             </div>
           </div>
-
+          
           <Card className="p-8">
             <div className="prose dark:prose-invert max-w-none">
               <h2 className="text-3xl font-bold mb-6">Hello! I&apos;m Lee Dunn</h2>
@@ -199,10 +202,10 @@ export default function AboutPage() {
               </div>
             </div>
           </Card>
+          </div>
         </div>
+        <RustExpertise />
       </div>
-
-      <RustExpertise />
     </div>
   );
 }

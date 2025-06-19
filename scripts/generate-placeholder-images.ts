@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { createCanvas } from "canvas";
+import { createCanvas, loadImage } from "canvas";
 import matter from "gray-matter";
 
 // Configuration
@@ -24,8 +24,8 @@ async function generatePlaceholderImage(title: string, outputPath: string) {
   ctx.fillStyle = COLORS.background;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  // Draw accent lines
-  ctx.strokeStyle = COLORS.accent;
+  // Draw primary lines
+  ctx.strokeStyle = COLORS.primary;
   ctx.lineWidth = 4;
   ctx.setLineDash([20, 10]);
 
@@ -43,6 +43,24 @@ async function generatePlaceholderImage(title: string, outputPath: string) {
   gradient.addColorStop(1, `${COLORS.secondary}40`);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Add logo
+  try {
+    const logoPath = path.join(process.cwd(), 'public/images/logo-Transparent.webp');
+    const logo = await loadImage(logoPath);
+    
+    // Calculate logo dimensions (maintain aspect ratio)
+    const logoMaxSize = 80; // Max height of the logo
+    const ratio = logo.height / logoMaxSize;
+    const logoWidth = logo.width / ratio;
+    const logoHeight = logoMaxSize;
+    
+    // Draw logo with padding
+    const logoPadding = PADDING / 2;
+    ctx.drawImage(logo, logoPadding, logoPadding, logoWidth, logoHeight);
+  } catch (error) {
+    console.error('Error loading logo:', error);
+  }
 
   // Draw title
   ctx.font = `bold ${FONT_SIZE}px 'Orbitron', sans-serif`;

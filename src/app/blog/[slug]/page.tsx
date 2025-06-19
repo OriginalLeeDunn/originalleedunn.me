@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import type { Metadata } from "next";
 import { BlogPostContent } from "@/components/BlogPostContent";
+import SpaceBackground from "@/components/ui/SpaceBackground";
 
 interface Props {
   params: { slug: string };
@@ -68,5 +69,12 @@ export default async function BlogPost({ params }: Props) {
     notFound();
   }
 
-  return <BlogPostContent post={post} slug={params.slug} allPosts={allPosts} />;
+  return (
+    <div className="relative min-h-screen">
+      <SpaceBackground />
+      <div className="relative z-10">
+        <BlogPostContent post={post} slug={params.slug} allPosts={allPosts} />
+      </div>
+    </div>
+  );
 }

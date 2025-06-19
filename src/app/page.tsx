@@ -9,6 +9,7 @@ import { CustomSection } from "@/components/CustomSection";
 import Projects from "@/components/Projects";
 import { ContactSection } from "@/components/ContactSection";
 import { useEffect } from "react";
+import SpaceBackground from "@/components/ui/SpaceBackground";
 
 export default function Home() {
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function Home() {
         containerClass="flex flex-col items-center justify-center h-full"
       >
         <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-30"></div>
-        
+        <SpaceBackground/>
         <div className="container relative z-10 px-4 mx-auto text-center">
           <div className="mb-1.3">
             <div className="inline-flex items-center px-4 py-1.5 mb-4 text-sm font-medium rounded-full bg-secondary/10 text-secondary border border-secondary/20">
@@ -145,7 +146,7 @@ export default function Home() {
       >
         <div className="max-w-4xl mx-auto text-center">
           <p className="mb-6 text-lg text-muted-foreground">
-            A <span className="text-primary font-medium">Rust enthusiast</span> and <span className="text-secondary font-medium">full-stack developer</span> with a passion for building high-performance applications. I specialize in creating seamless experiences that blend cutting-edge technology with intuitive design. When I'm not coding, you can find me exploring AI advancements or contributing to open-source projects.
+            A <span className="text-primary font-medium">Rust enthusiast</span> and <span className="text-secondary font-medium">full-stack developer</span> with a passion for building high-performance applications. I specialize in creating seamless experiences that blend cutting-edge technology with intuitive design. When I&apos;m not coding, you can find me exploring AI advancements or contributing to open-source projects.
           </p>
           <Button 
             asChild 
@@ -223,10 +224,10 @@ export default function Home() {
       >
         <div className="max-w-4xl mx-auto text-center">
           <p className="mb-8 text-lg text-muted-foreground">
-            Have a project in mind or want to collaborate? I'm always excited to discuss new opportunities. 
-            Whether it's about <span className="text-primary font-medium">Rust development</span>, 
+            Have a project in mind or want to collaborate? I&apos;m always excited to discuss new opportunities. 
+            Whether it&apos;s about <span className="text-primary font-medium">Rust development</span>, 
             <span className="text-secondary font-medium"> web solutions</span>, or just to say hello, 
-            I'll get back to you as soon as possible.
+            I&apos;ll get back to you as soon as possible.
           </p>
           <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border border-border/50 shadow-sm">
             <ContactSection />

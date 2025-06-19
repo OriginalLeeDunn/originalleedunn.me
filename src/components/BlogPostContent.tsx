@@ -386,16 +386,6 @@ export function BlogPostContent({
                 </div>
 
                 <div className="mt-12">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Related Posts</h2>
-                    <Link
-                      href="/blog"
-                      className="text-sm font-medium text-primary hover:underline flex items-center"
-                    >
-                      View all posts{" "}
-                      <ArrowLeft className="w-4 h-4 ml-1 rotate-180" />
-                    </Link>
-                  </div>
                   <RelatedPosts posts={relatedPostsData} currentPostSlug={post.slug} />
                 </div>
               </div>

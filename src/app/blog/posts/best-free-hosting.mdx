@@ -1,0 +1,119 @@
+---
+title: "Best Free Hosting for My Static Portfolio"
+date: "2025-06-19"
+description: "Comparing Fly.io, Digital Ocean, and Vercel to find the best free option for hosting my Dockerized static portfolio site."
+excerpt: "A breakdown of three top platforms for static site hosting and why I chose the best one for my use case."
+coverImage: "/images/posts/best-free-hosting-featured.jpg"
+tags: ["hosting", "portfolio", "docker", "vercel", "fly.io", "digitalocean"]
+draft: false
+---
+
+# Best Free Hosting for My Static Portfolio
+
+## Introduction
+
+After containerizing my website portfolio with Docker, I started looking for a solid **free hosting option**. My needs are minimal: a **static site**, no dynamic backend, and just enough functionality to allow users to contact me via email. 
+
+I evaluated three popular platforms — **Fly.io**, **Digital Ocean**, and **Vercel** — to determine which would best support my goals while keeping things cost-free and developer-friendly.
+
+## The Shortlist
+
+### Fly.io
+
+**✅ Pros:**
+
+- Full Docker support with fast global edge deployment
+- Free tier includes up to **3 shared 256MB VMs**
+- Works directly from the CLI with `flyctl`
+- Custom domains and HTTPS included
+- Handles scaling and future backend needs if I ever expand
+
+**⚠️ Cons:**
+
+- Cold start times can occur on inactive apps
+- Slightly more involved setup (requires `fly.toml` config)
+- Bandwidth-limited on the free tier (160GB/month)
+
+**Verdict:** Ideal if you're Docker-native and want global edge capabilities. Feels very "infra-savvy" and future-proof.
+
+---
+
+### Digital Ocean (App Platform)
+
+**✅ Pros:**
+
+- Easy-to-use GUI, GitHub integration, and CI/CD
+- Supports Docker containers, though more focused on app logic
+- Free tier offers **3 static sites** with custom domain and HTTPS
+- Reliable infrastructure and clear upgrade paths
+
+**⚠️ Cons:**
+
+- Free static sites **don't support Docker** (only non-containerized apps)
+- Docker deployment requires a paid plan
+- Better suited for backend/full-stack apps than plain static
+
+**Verdict:** Only makes sense if I switch from Docker to a static file deployment like HTML/JS/CSS from GitHub.
+
+---
+
+### Vercel
+
+**✅ Pros:**
+
+- Optimized for frontend/static sites
+- GitHub/GitLab/Bitbucket integration
+- Free tier includes custom domains, HTTPS, and CI/CD
+- Global CDN + edge caching = blazing fast load times
+- Automatic deployments on git push
+
+**⚠️ Cons:**
+
+- Doesn’t natively support Docker containers
+- Not suitable for anything that needs server containers (e.g. backend in container)
+
+**Verdict:** Best if you're serving static assets without needing a container — it's a **perfect fit** if I switch from Docker to just deploying raw static files.
+
+---
+
+## My Decision
+
+Ultimately, I chose **Vercel** for my portfolio.
+
+Since my site is static, I decided to strip it out of the container and deploy the raw assets directly. Vercel gave me:
+
+- The fastest global delivery
+- The cleanest UI and DevEx
+- Custom domain + HTTPS, for free
+- Instant deploys via GitHub
+
+And it didn’t cost me a cent.
+
+## Deployment Flow
+
+I converted my Dockerized site to a static build folder and connected it to Vercel:
+
+```bash
+npm run build
+# Or however your static files get generated
+```
+
+Then I pushed to a GitHub repo, linked the repo to Vercel, and my site was live in minutes.
+
+---
+
+## Conclusion
+
+While Docker is awesome for development and flexibility, sometimes the simpler path is the better one — especially when it’s free and lightning fast.
+
+If I ever need backend functionality or full containerization, I’ll revisit **Fly.io**. But for now, **Vercel is the smoothest ride** for hosting static sites.
+
+> Keep it simple. Let the tools do the heavy lifting.
+
+---
+
+## References
+
+- [Vercel – vercel.com](https://vercel.com/)
+- [Fly.io – fly.io](https://fly.io/)
+- [Digital Ocean – digitalocean.com](https://digitalocean.com/)
