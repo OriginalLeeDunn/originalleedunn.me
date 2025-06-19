@@ -1,0 +1,65 @@
+# Dependencies and build artifacts
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Development files
+.env*.local
+*.pem
+*.p12
+*.key
+*.crt
+.DS_Store
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.vercel/
+.idea/
+.vscode/
+*.sublime-*
+
+# Test files
+**/__tests__/
+**/*.test.*
+**/*.spec.*
+
+# Blog post images (handled by scripts)
+public/images/blog/**/*.{jpg,jpeg,png,webp}
+
+# Ignore local development files
+.dockerignore
+Dockerfile*
+docker-compose*
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore editor files
+*.swp
+*.swo
+*~
+
+# Ignore local configuration files
+.env*
+!.env*.example
+
+# Ignore large files
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
