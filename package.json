@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "build": "npm run optimize:images && next build",
+    "build": "if [ -f scripts/optimize-images.js ]; then npm run optimize:images; fi && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
@@ -40,7 +40,7 @@
     "blog:generate-images": "ts-node --project tsconfig.scripts.json scripts/generate-placeholder-images.ts",
     "blog:setup": "npm run blog:validate && npm run blog:generate-images",
     "blog:check-setup": "ts-node --project tsconfig.scripts.json scripts/check-blog-setup.ts",
-    "prepare": "husky install"
+    "prepare": "if [ -d .git ] && [ -f package.json ] && grep -q 'husky' package.json; then husky install; fi"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
