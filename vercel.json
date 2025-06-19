@@ -3,21 +3,15 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": ".next"
-      }
+      "use": "@vercel/next"
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/" }
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ],
-  "buildCommand": "npm run vercel-build",
-  "installCommand": "npm install --no-optional",
-  "devCommand": "next dev",
-  "framework": "nextjs",
-  "outputDirectory": ".next",
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1",
@@ -27,6 +21,5 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "regions": ["iad1"],
-  "public": true
+  "regions": ["iad1"]
 }
