@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { format } from "date-fns";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -335,10 +335,15 @@ export function BlogPostContent({
 
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-4 border-y border-border/40">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                        LD
-                      </span>
+                    <div className="h-12 w-12 rounded-full overflow-hidden border-2 border-primary/30 flex-shrink-0">
+                      <Image
+                        src="/images/avatar.gif"
+                        alt="Lee Dunn"
+                        width={48}
+                        height={48}
+                        className="h-full w-full object-cover"
+                        unoptimized
+                      />
                     </div>
                     <div>
                       <p className="text-sm font-medium">Lee Dunn</p>

@@ -1,6 +1,9 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { RustExpertise } from "@/components/RustExpertise";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About Me | OriginalLeeDunn",
@@ -13,7 +16,38 @@ export default function AboutPage() {
     <div className="space-y-12">
       <div className="container py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6">About Me</h1>
+          {/* Hero Section */}
+          <div className="flex flex-col items-center text-center mb-12">
+            <div className="relative w-40 h-40 mb-6 rounded-full overflow-hidden border-4 border-primary/30">
+              <Image
+                src="/images/avatar.gif"
+                alt="Lee Dunn"
+                width={160}
+                height={160}
+                className="h-full w-full object-cover"
+                unoptimized
+              />
+            </div>
+            <h1 className="text-4xl font-bold mb-4">About Me</h1>
+            <p className="text-xl text-muted-foreground max-w-2xl">
+              Rust & Web Developer | AI Enthusiast | Creative Problem Solver
+            </p>
+            <div className="mt-6 flex gap-4">
+              <Button asChild>
+                <a href="#contact" className="group">
+                  Get in Touch
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              </Button>
+              <Button variant="outline" asChild>
+                <a href="/blog" className="group">
+                  Read My Blog
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              </Button>
+            </div>
+          </div>
+
           <Card className="p-8">
             <div className="prose dark:prose-invert max-w-none">
               <h2 className="text-3xl font-bold mb-6">Hello! I&apos;m Lee Dunn</h2>
