@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { createCanvas, loadImage } from "canvas";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
 import matter from "gray-matter";
 
 // Configuration
@@ -47,7 +47,8 @@ async function generatePlaceholderImage(title: string, outputPath: string) {
   // Add logo
   try {
     const logoPath = path.join(process.cwd(), 'public/images/logo-Transparent.webp');
-    const logo = await loadImage(logoPath);
+    const logoData = fs.readFileSync(logoPath);
+    const logo = await loadImage(logoData);
     
     // Calculate logo dimensions (maintain aspect ratio)
     const logoMaxSize = 80; // Max height of the logo
@@ -108,7 +109,7 @@ async function generatePlaceholderImage(title: string, outputPath: string) {
   ctx.fillText("originalleedunn.me", WIDTH - PADDING, HEIGHT - PADDING / 2);
 
   // Save the image
-  const buffer = canvas.toBuffer("image/jpeg", { quality: 0.9 });
+  const buffer = canvas.toBuffer('image/jpeg', 0.8);
   fs.writeFileSync(outputPath, buffer);
   console.log(`Generated: ${outputPath}`);
 }
